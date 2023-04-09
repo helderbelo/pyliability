@@ -11,6 +11,10 @@ import pandas as pd
 import datetime as dt
 from babel.numbers import format_currency
 
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+server = app.server
+#===========================
+
 banco_tabuas = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/banco_tabuas.xlsx?raw=true', sheet_name='tabuas')
 
 ativo = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/base-bd.xlsx?raw=true', sheet_name='ativos')
@@ -20,11 +24,6 @@ pensionista = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/base-bd
 opcoes_tabuas = list(banco_tabuas.columns[1:])
 
 database = pd.to_datetime(dt.date(2022, 9, 30)) # DATA BASE DA AVALIAÇÃO (Ano, Mês, Dia)
-
-# =====================================================================
-#app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-server = app.server
 
 # =====================================================================
 # Layout 
