@@ -324,10 +324,6 @@ app.layout = dbc.Container(
                                                 
                         dbc.Col([html.Div(id='table-data1')], xs={'size':'auto', 'offset':0}, sm={'size':'auto', 'offset':0}, md={'size':4, 'offset':0}, lg={'size':'auto', 'offset':0},
                                                 xl={'size':'auto', 'offset':0}),
-                    
-
-                        dbc.Row([html.P(id='valor-provisao',children=["init"])]),
-
                       
                       ],justify="left",style={"margin-top": "20px"}),
                       ]),           
