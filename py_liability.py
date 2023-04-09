@@ -6,13 +6,10 @@ from dash.dependencies import Input, Output,State, ClientsideFunction
 import dash_bootstrap_components as dbc
 from dash import Dash, html, Input, Output
 import dash_daq as daq
-
 import numpy as np
 import pandas as pd
-
 import datetime as dt
 from babel.numbers import format_currency
-
 
 banco_tabuas = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/banco_tabuas.xlsx?raw=true', sheet_name='tabuas')
 
@@ -27,7 +24,7 @@ database = pd.to_datetime(dt.date(2022, 9, 30)) # DATA BASE DA AVALIAÇÃO (Ano,
 # =====================================================================
 #app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-
+server = app.server
 
 # =====================================================================
 # Layout 
@@ -730,4 +727,4 @@ def provisoes(botao,mortalidade_geral_M,mortalidade_geral_F,entrada_invalidez,id
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False, port=8051)
+    app.run_server(debug=False)
