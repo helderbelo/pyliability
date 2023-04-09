@@ -8,4 +8,4 @@ gunicorn
 openpyxl
 dash_table
 dash_daq
-babel.numbers
+babel
