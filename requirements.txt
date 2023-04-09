@@ -1,0 +1,11 @@
+dash == 2.7.1
+dash_core_components
+dash_html_components
+dash_bootstrap_components
+numpy
+pandas
+gunicorn
+openpyxl
+dash_table
+dash_daq
+babel.numbers
