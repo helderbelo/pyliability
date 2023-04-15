@@ -6,24 +6,32 @@ from dash.dependencies import Input, Output,State, ClientsideFunction
 import dash_bootstrap_components as dbc
 from dash import Dash, html, Input, Output
 import dash_daq as daq
+
 import numpy as np
 import pandas as pd
+
 import datetime as dt
+from datetime import date
+
 from babel.numbers import format_currency
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
-server = app.server
-#===========================
 
 banco_tabuas = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/banco_tabuas.xlsx?raw=true', sheet_name='tabuas')
 
-ativo = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/base-bd.xlsx?raw=true', sheet_name='ativos')
-aposentado = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/base-bd.xlsx?raw=true', sheet_name='aposentados')
-pensionista = pd.read_excel('https://github.com/helderbelo/tcc/blob/main/base-bd.xlsx?raw=true', sheet_name='pensionistas')
+base = 'https://github.com/helderbelo/tcc/blob/main/base-bd.xlsx?raw=true'
+
+ativo = pd.read_excel(base, sheet_name='ativos')
+aposentado = pd.read_excel(base, sheet_name='aposentados')
+pensionista = pd.read_excel(base, sheet_name='pensionistas')
 
 opcoes_tabuas = list(banco_tabuas.columns[1:])
 
 database = pd.to_datetime(dt.date(2022, 9, 30)) # DATA BASE DA AVALIAÇÃO (Ano, Mês, Dia)
+
+# =====================================================================
+#app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+
 
 # =====================================================================
 # Layout 
@@ -34,12 +42,24 @@ app.layout = dbc.Container(
                     html.Div([
                          dbc.Row([dbc.Col(html.H3(dbc.Badge("pyLiability", color="#a50000", className="me-1"))),
                          
-                                  dbc.Col([html.P('Hélder Belo - UFPE', style={'textAlign': 'right','color':'white'})]),
+                                  dbc.Col([html.P('Hélder N. F. Belo - UFPE', style={'textAlign': 'right','color':'white'})]),
     #html.Img(id="logo", src=app.get_asset_url("logo.png"), height=50)], style={'textAlign': 'right'})
                                   ]),
                         
                             ], style={"background-color": "#003e4c", #003e4c",
                                "margin": "5px", "padding": "25px"},),                    
+                                                
+                            html.Div([
+                                dbc.Row([html.P('Aplicação desenvolvida para o Trabalho de Conclusão de Curso em Ciências Atuariais pela Universidade Federal de Pernambuco.' ),
+                                        html.P('Base de dados utilizada nos cálculos: '+base),
+                                        ],style={"margin-left": "15px","margin-top": "10px"},),
+                                    ],className='bg-light text-dark',style={ #p-3 mb-2 bg-light text-dark
+                                              "margin-left": "5px", 
+                                              "margin-bottom": "20px",
+                                              #"padding": "-5px"
+                                              }),       
+
+                    
                     dbc.Col([
                     html.Div([
                         html.H5(dbc.Badge("Selecione a tábua de mortalidade geral - Masculina:", color="#5d8aa7", className="me-1")),
@@ -49,7 +69,7 @@ app.layout = dbc.Container(
                                             for j in opcoes_tabuas
                                         ],
                                         value= 'BR-EMSsb-v.2010-m',
-                                        style={"margin-top": "10px",'width': '86%'}
+                                        style={"margin-top": "20px",'width': '86%'}
                                     ),                        
                         ], id="teste1")
                     ]),
@@ -62,7 +82,7 @@ app.layout = dbc.Container(
                                             for j in opcoes_tabuas
                                         ],
                                         value= 'BR-EMSsb-v.2010-f',
-                                        style={"margin-top": "10px",'width': '86%'}
+                                        style={"margin-top": "20px",'width': '86%'}
                                     ),                        
                         ], id="teste2")
                     ]),
@@ -75,7 +95,7 @@ app.layout = dbc.Container(
                                             for j in opcoes_tabuas
                                         ],
                                         value= 'ALVARO VINDAS',
-                                        style={"margin-top": "10px",'width': '86%'}
+                                        style={"margin-top": "20px",'width': '86%'}
                                     ),                        
                         ], id="teste")
                     ]),
@@ -83,7 +103,7 @@ app.layout = dbc.Container(
                         html.Div(children=[
                         dbc.Row([    
                             dbc.Col([
-                            dbc.Row([html.P("Idade mínima de aposentadoria"),
+                            dbc.Row([html.P("Idade mínima de aposentadoria (em anos)"),
                                     daq.NumericInput(
                                         #label='Idade mínima de aposentadoria',
                                         id='idade_aposentadoria',
@@ -97,7 +117,7 @@ app.layout = dbc.Container(
                                     ]#,justify='left'
                                     ),       
 
-                            dbc.Row([html.P("Tempo mínimo de patrocinadora"),
+                            dbc.Row([html.P("Tempo mínimo de patrocinadora (em anos)"),
                                     daq.NumericInput(
                                         #label='Tempo mínimo de patrocinadora',
                                         id='tempo_patrocinadora',
@@ -111,7 +131,7 @@ app.layout = dbc.Container(
                                     ),
                                     ]),
 
-                            dbc.Row([html.P("Tempo mínimo de adesão ao plano"),
+                            dbc.Row([html.P("Tempo mínimo de adesão ao plano (em anos)"),
                                     daq.NumericInput(
                                         #label='Tempo mínimo de adesão ao plano',
                                         id='tempo_plano',
@@ -125,7 +145,7 @@ app.layout = dbc.Container(
                                     ),
                             ]),
 
-                            dbc.Row([html.P("Última idade que considera probabilidade de desligamento"),
+                            dbc.Row([html.P("Última idade que considera probabilidade de desligamento (em anos)"),
                                     daq.NumericInput(
                                         #label='Última idade que considera probabilidade de desligamento',
                                         id='idade_maxima_rotatividade',
@@ -236,9 +256,9 @@ app.layout = dbc.Container(
                                     daq.NumericInput(
                                         #label='% Rotatividade (desligamento)',
                                         id='percentual_rotatividade',
-                                        min=0,
-                                        max=100,
-                                        value=1,
+                                        min=0.00,
+                                        max=100.00,
+                                        value=1.00,
                                         size=70,
                                         style={
                                                 "paddingBottom": "3%"
@@ -274,7 +294,7 @@ app.layout = dbc.Container(
                                     ),
                                     ]),
 
-                            dbc.Row([html.P("Diferença de idade dos Cônjuges (Masculino x Feminino)"),
+                            dbc.Row([html.P("Diferença de idade do Cônjuge (Masculino - Feminino)"),
                                     daq.NumericInput(
                                         #label='Diferença de idade dos Cônjuges (Masculino x Feminino)',
                                         id='dif_conjuge',
@@ -299,14 +319,23 @@ app.layout = dbc.Container(
 
                                 ),
                     dbc.Row([
-                    html.Div([
-                                dbc.Button("Calcular", color="primary", id="calculo-button", size="lg", n_clicks=0),
-                                dcc.Loading(
-                                        id="loading-1",
-                                        type="dot",
-                                        children=html.Div(id="loading-output-1")),
-                        
-                                ]),
+                        html.Div([  
+    
+                        dbc.Row([html.H5(dbc.Badge('Selecione a Data Base da Avaliação', color="#5d8aa7", className="me-1"))]),
+                        dbc.Row([
+                                    dbc.Col([dcc.DatePickerSingle(
+                                    #month_format='MMMM Y',
+                                    placeholder='MMMM Y',
+                                    display_format='DD MM Y',
+                                    date=date(2022, 9, 30),
+                                    id='database',
+                                                    ),
+                                    ]),
+                            
+                                        
+                                ])
+
+                            ])
                     ]),
                         dbc.Row([
                         dbc.Col([dbc.Card([   
@@ -318,8 +347,19 @@ app.layout = dbc.Container(
                                     #"color": "#FFFFFF"
                                     }
                                     )
-                                    ], md=6,
-                                    ),]),
+                                    ], md=6,),
+
+                        dbc.Col([html.Div([
+                                dbc.Button("Calcular", color="primary", id="calculo-button", size="lg", n_clicks=0),
+                                dcc.Loading(
+                                        id="loading-1",
+                                        type="dot",
+                                        #children=html.Div(id="loading-output-1")
+                                        )
+                                        ],style={"margin-top": "25px"},),
+                        ])
+                                    
+                                ]),
                                                 
                       html.Div([           
                       dbc.Row([
@@ -329,7 +369,7 @@ app.layout = dbc.Container(
                                                 
                         dbc.Col([html.Div(id='table-data1')], xs={'size':'auto', 'offset':0}, sm={'size':'auto', 'offset':0}, md={'size':4, 'offset':0}, lg={'size':'auto', 'offset':0},
                                                 xl={'size':'auto', 'offset':0}),
-                      
+                                                                  
                       ],justify="left",style={"margin-top": "20px"}),
                       ]),           
                                           
@@ -343,21 +383,22 @@ app.layout = dbc.Container(
 @app.callback(
     [#Output('table-data', 'children'),
      #Output('contraprestacao', 'children'),
-     Output("loading-output-1", "children"),   
+     Output("loading-1", "children"),
      Output('table-data', 'children'),
      Output('table-data1', 'children'),
      #Output('valor-provisao', 'children')
           ],
     
     [Input("calculo-button", "n_clicks")],
-     [State("tabua-dropdown1", "value"),State("tabua-dropdown2", "value"), State("tabua-dropdown", "value"),
+
+     [State("database", "date"),State("tabua-dropdown1", "value"),State("tabua-dropdown2", "value"), State("tabua-dropdown", "value"),
      State("idade_aposentadoria", "value"),State("tempo_patrocinadora", "value"),State("tempo_plano", "value"),State("teto_salario_contribuicao", "value"),
      State("perc_beneficio_salario", "value"),State("perc_reversao_pensao", "value"),State("i", "value"),State("idade_maxima_rotatividade", "value"),
      State("percentual_rotatividade", "value"),State("crescimento_salarial", "value"),State("contribuicao_ativo", "value"),State("contribuicao_patroc", "value"),
      State("tx_carregamento", "value"),State("dif_conjuge", "value")]     
 )
 
-def provisoes(botao,mortalidade_geral_M,mortalidade_geral_F,entrada_invalidez,idade_aposentadoria,
+def provisoes(botao,data,mortalidade_geral_M,mortalidade_geral_F,entrada_invalidez,idade_aposentadoria,
               tempo_patrocinadora,tempo_plano,teto_salario_contribuicao,perc_beneficio_salario,perc_reversao_pensao,i,
               idade_maxima_rotatividade,percentual_rotatividade,crescimento_salarial,perc_contr_ativo,perc_contr_patroc,
               tx_carregamento,dif_conjuge):  
@@ -366,7 +407,7 @@ def provisoes(botao,mortalidade_geral_M,mortalidade_geral_F,entrada_invalidez,id
 
     ativos,aposentados,pensionistas = ativo.copy(),aposentado.copy(),pensionista.copy()
 
-    database = pd.to_datetime(dt.date(2022, 9, 30)) # DATA BASE DA AVALIAÇÃO (Ano, Mês, Dia)
+    database = pd.to_datetime(data) # DATA BASE DA AVALIAÇÃO (Ano, Mês, Dia)
     
     perc_beneficio_salario/=100
     perc_reversao_pensao/=100
@@ -723,9 +764,8 @@ def provisoes(botao,mortalidade_geral_M,mortalidade_geral_F,entrada_invalidez,id
                 },
     )
 
-    loading=''
-    return loading,tabela_pmbc,tabela_pmbac
-
+    aviso = ''
+    return aviso,tabela_pmbc,tabela_pmbac
 
 if __name__ == "__main__":
     app.run_server(debug=False)
