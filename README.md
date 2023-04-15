@@ -5,5 +5,5 @@ Seu objetivo consiste no cálculo de Provisões Matemáticas em planos de Benef�
 A aplicação está disponível no link: https://pyliability.onrender.com/  
   
 Qualquer sugestão de melhorias ou correções, contatar o responsável:  
-Hélder Nunes Ferraz Belo  
+Hélder Belo  
 helder.belo@ufpe.br | helder@live.it
