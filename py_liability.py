@@ -29,9 +29,9 @@ opcoes_tabuas = list(banco_tabuas.columns[1:])
 database = pd.to_datetime(dt.date(2022, 9, 30)) # DATA BASE DA AVALIAÇÃO (Ano, Mês, Dia)
 
 # =====================================================================
-#app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
 
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+server = app.server
 
 # =====================================================================
 # Layout 
