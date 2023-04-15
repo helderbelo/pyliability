@@ -300,8 +300,13 @@ app.layout = dbc.Container(
                                 ),
                     dbc.Row([
                     html.Div([
-                            dbc.Button("Calcular", color="primary", id="calculo-button", size="lg", n_clicks=0)
-                        ])
+                                dbc.Button("Calcular", color="primary", id="calculo-button", size="lg", n_clicks=0),
+                                dcc.Loading(
+                                        id="loading-1",
+                                        type="dot",
+                                        children=html.Div(id="loading-output-1")),
+                        
+                                ]),
                     ]),
                         dbc.Row([
                         dbc.Col([dbc.Card([   
@@ -338,6 +343,7 @@ app.layout = dbc.Container(
 @app.callback(
     [#Output('table-data', 'children'),
      #Output('contraprestacao', 'children'),
+     Output("loading-output-1", "children"),   
      Output('table-data', 'children'),
      Output('table-data1', 'children'),
      #Output('valor-provisao', 'children')
@@ -717,8 +723,8 @@ def provisoes(botao,mortalidade_geral_M,mortalidade_geral_F,entrada_invalidez,id
                 },
     )
 
-
-    return tabela_pmbc,tabela_pmbac
+    loading=''
+    return loading,tabela_pmbc,tabela_pmbac
 
 
 if __name__ == "__main__":
